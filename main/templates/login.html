@@ -1,0 +1,15 @@
+<!-- registration/login.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Вхід</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Увійти</button>
+</form>
+<h2>Або увійдіть за допомогою Spotify</h2>
+<a href="{% url 'social:begin' 'spotify' %}" class="btn btn-success">Увійти через Spotify</a>
+<p>Не маєте аккаунту? <a href="{% url 'register' %}">Зареєструйтеся</a></p>
+{% endblock %}

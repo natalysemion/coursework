@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Заголовок сторінки{% endblock %}
+
+
+{% block content %}
+
+<html>
+<head>
+    <title>Деталі події</title>
+</head>
+<body>
+    <h1>Деталі події: {{ event.name }}</h1>
+    <p>Date and Time: {{ event.date_time }}</p>
+    <p>Place: {{ event.place.name }}</p>
+    <p>Price: ${{ event.price }}</p>
+    <p>Available Tickets: {{ event.amount }}</p>
+    {% for artist in event.artists.all %}
+        <li><a href="{% url 'artist_details' artist.id %}">{{ artist.name }}</a></li>
+    {% endfor %}
+    <!-- Додайте іншу інформацію про подію, якщо необхідно -->
+
+    <a href="{% url 'event_list' %}">Повернутися до списку подій</a>
+</body>
+</html>
+
+
+{% endblock %}

@@ -1,0 +1,13 @@
+<!-- edit_event.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Редагування події</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+</form>
+<a href="{% url 'event_list' %}">Скасувати</a>
+{% endblock %}

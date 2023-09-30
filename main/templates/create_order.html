@@ -1,0 +1,13 @@
+<!-- order/create_order.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Створення замовлення</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Створити замовлення</button>
+</form>
+<a href="{% url 'order_list' %}">Скасувати</a>
+{% endblock %}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block title %}Заголовок сторінки{% endblock %}
+
+
+{% block content %}
+<html>
+<head>
+    <title>Деталі артиста</title>
+</head>
+<body>
+    <h1>Деталі артиста: {{ artist.name }}</h1>
+    <p>Gender: {{ artist.male }}</p>
+    <p>Birth Date: {{ artist.birth_date }}</p>
+    <p>Country: {{ artist.country.name }}</p>
+
+    <!-- Додайте іншу інформацію про артиста, якщо необхідно -->
+
+    <a href="{% url 'artist_list' %}">Повернутися до списку артистів</a>
+</body>
+</html>
+
+{% endblock %}

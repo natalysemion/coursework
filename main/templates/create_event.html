@@ -1,0 +1,13 @@
+<!-- create_event.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Створення події</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+</form>
+<a href="{% url 'event_list' %}">Повернутися до списку подій</a>
+{% endblock %}

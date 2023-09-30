@@ -1,0 +1,33 @@
+<!-- events.html -->
+{% extends 'base.html' %}
+
+{% block title %}Заголовок сторінки{% endblock %}
+
+
+{% block content %}
+
+<html>
+<head>
+    <title>Список подій</title>
+</head>
+<body>
+    <h1>Список подій</h1>
+    <ul>
+        {% for event in events %}
+            <li>
+                <h2><a href="{% url 'event_details' event.id %}">{{ event.name }}</a></h2>
+                <p>Date and Time: {{ event.date_time }}</p>
+                <p>Place: {{ event.place.name }}</p>
+                <p>Price: ${{ event.price }}</p>
+                <p>Available Tickets: {{ event.amount }}</p>
+                <a href="{% url 'edit_event' event.id  %}" class="btn btn-primary">Редагувати подію</a>
+                <a href="{% url 'delete_event' event.id  %}" class="btn btn-primary">Видалити подію</a>
+            </li>
+        {% endfor %}
+
+<a href="{% url 'create_event' %}" class="btn btn-primary">Створити подію</a>
+    </ul>
+</body>
+</html>
+
+{% endblock %}

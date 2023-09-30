@@ -1,0 +1,45 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Заголовок сторінки{% endblock %}
+{% load static %}
+{% block content %}
+
+<html>
+<head>
+    <title>Деталі артиста</title>
+</head>
+<body>
+    <h1>Деталі артиста: {{ artist.name }}</h1>
+    <p>Gender: {{ artist.male }}</p>
+    <p>Birth Date: {{ artist.birth_date }}</p>
+    <p>Country: {{ artist.country.name }}</p>
+
+    <!-- Додавання фотографії артиста -->
+    {% if artist.photo %}
+        <img src="{{ artist.photo }}" alt="{{ artist.name }} Photo">
+    {% else %}
+        <p>Foto not available</p>
+    {% endif %}
+    <h3>Пісні артиста:</h3>
+    <ul>
+        {% for song in artist.songs.all %}
+            <li><a href="{% url 'song_detail' song.id %}">{{ song.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <!-- Відображення списку подій -->
+    <h2>Список подій, в яких бере участь артист:</h2>
+    <ul>
+        {% for event in events %}
+            <li>
+                <a href="{% url 'event_details' event.id %}">{{ event.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <a href="{% url 'artist_list' %}">Повернутися до списку артистів</a>
+</body>
+</html>
+
+{% endblock %}

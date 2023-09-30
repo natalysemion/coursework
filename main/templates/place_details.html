@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Заголовок сторінки{% endblock %}
+
+
+{% block content %}
+
+<html>
+<head>
+    <title>Деталі місця</title>
+</head>
+<body>
+    <h1>Деталі місця: {{ place.name }}</h1>
+    <p>City: {{ place.city }}</p>
+    <p>Location: {{ place.location }}</p>
+    <p>Capacity: {{ place.capacity }}</p>
+
+    <!-- Додавання фотографії місця, якщо вона доступна -->
+    {% if place.photo %}
+        <img src="{{ place.photo }}" alt="{{ place.name }} Photo">
+    {% else %}
+        <p>Фото недоступно</p>
+    {% endif %}
+
+    <!-- Додайте іншу інформацію про місце, якщо необхідно -->
+
+    <a href="{% url 'place_list' %}">Повернутися до списку місць</a>
+</body>
+</html>
+
+{% endblock %}

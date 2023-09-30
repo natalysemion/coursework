@@ -1,0 +1,18 @@
+<!-- song_details.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ song.name }}</h2>
+<p>Виконавець: {{ song.artist.name }}</p>
+<p>Текст пісні:</p>
+<pre>{{ song.lyrics }}</pre>
+
+{% if song.spotify_link %}
+    <p><a href="{{ song.spotify_link }}" target="_blank">Слухати на Spotify</a></p>
+{% endif %}
+
+{% if song.youtube_link %}
+    <p><a href="{{ song.youtube_link }}" target="_blank">Переглянути на YouTube</a></p>
+{% endif %}
+{% endblock %}
