@@ -27,46 +27,75 @@
 
 <html>
 <head>
-    <!-- Підключення бібліотеки Google Charts -->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['bar']});
-        google.charts.setOnLoadCallback(drawChart);
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
 
-        function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Артист');
-            data.addColumn('number', 'Кількість пісень');
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Артист');
+      data.addColumn('number', 'Кількість подій');
 
-            // Отримайте дані з вашого списку артистів та кількість пісень і додайте їх до діаграми
-            data.addRows([
-                ['Артист 1', 10],
-                ['Артист 2', 5],
-                ['Артист 3', 8],
-                // Додайте дані для інших артистів
-            ]);
+      var events_data = {{ data_for_chart2|safe }};  // Вставте дані з контексту
 
-            var options = {
-                chart: {
-                    title: 'Кількість пісень в кожного артиста',
-                    subtitle: 'За даними з вашоєї бази даних',
-                }
-            };
+      for (var i = 0; i < events_data.length; i++) {
+        data.addRow([events_data[i].artist_name, events_data[i].events_count]);
+      }
 
-            var chart = new google.charts.Bar(document.getElementById('chart_div'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
-    </script>
+      var options = {
+        title: 'Співвідношення кількості подій артистів',
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+      chart.draw(data, options);
+    }
+  </script>
 </head>
 <body>
-    <!-- Відображення діаграми у div з id "chart_div" -->
-    <div id="chart_div" style="width: 100%; height: 400px;"></div>
+  <div id="piechart" style="width: 100%; height: 400px;"></div>
 </body>
 </html>
 
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
 
-<!-- Діаграма Google Charts -->
-<div id="chart_div" style="width: 100%; height: 400px;"></div>
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Артист');
+      data.addColumn('number', 'Кількість пісень');
+
+      var data_for_chart = {{ data_for_chart1|safe }};  // Вставте дані з контексту
+
+      for (var i = 0; i < data_for_chart.length; i++) {
+        data.addRow([data_for_chart[i].artist_name, data_for_chart[i].songs_count]);
+      }
+
+      var options = {
+        chart: {
+          title: 'Статистика артистів',
+          subtitle: 'Кількість пісень на артиста'
+        },
+        bars: 'vertical',  // Відображення вертикальних смуг
+        bar: { groupWidth: '10%' },  // Обмеження ширини стовпців
+        vAxis: { format: '0' }  // Відображення цілих чисел на вертикальній вісі
+      };
+
+      var chart = new google.charts.Bar(document.getElementById('barchart'));
+
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+  </script>
+</head>
+<body>
+  <div id="barchart" style="width: 100%; height: 400px;"></div>
+</body>
+</html>
 
 <table class="table table-striped">
     <thead>
@@ -85,30 +114,5 @@
     </tbody>
 </table>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load('current', {'packages':['bar']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Артист');
-        data.addColumn('number', 'Кількість пісень');
-
-        // Вставте дані для діаграми з змінної data_for_chart
-        var chartData = {{ data_for_chart|safe }};
-        data.addRows(chartData);
-
-        var options = {
-            chart: {
-                title: 'Кількість пісень в кожного артиста',
-                subtitle: 'За даними з вашоєї бази даних',
-            }
-        };
-
-        var chart = new google.charts.Bar(document.getElementById('chart_div'));
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-    }
-</script>
 
 {% endblock %}

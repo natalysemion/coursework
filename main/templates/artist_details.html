@@ -1,7 +1,6 @@
-
 {% extends 'base.html' %}
 
-{% block title %}Заголовок сторінки{% endblock %}
+{% block title %}Деталі артиста{% endblock %}
 {% load static %}
 {% block content %}
 
@@ -21,12 +20,14 @@
     {% else %}
         <p>Foto not available</p>
     {% endif %}
+
     <h3>Пісні артиста:</h3>
     <ul>
         {% for song in artist.songs.all %}
             <li><a href="{% url 'song_detail' song.id %}">{{ song.name }}</a></li>
         {% endfor %}
     </ul>
+
     <!-- Відображення списку подій -->
     <h2>Список подій, в яких бере участь артист:</h2>
     <ul>
@@ -36,10 +37,25 @@
             </li>
         {% endfor %}
     </ul>
-    <script src="{% static 'js/script.js' %}"></script>
 
+    <!-- Відображення топ-треків -->
+    {% if top_track_data %}
+        <h2>Топ-треки:</h2>
+        <ul>
+            {% for track in top_track_data.tracks %}
+                <li>Назва треку: {{ track.name }}</li>
+                <li>Артист: {{ track.artists.0.name }}</li>
+                <li>Альбом: {{ track.album.name }}</li>
+                <li>Популярність: {{ track.popularity }}</li>
+                <br>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Інформація про топ-треки відсутня.</p>
+    {% endif %}
+
+    <script src="{% static 'js/script.js' %}"></script>
     <a href="{% url 'artist_list' %}">Повернутися до списку артистів</a>
 </body>
 </html>
-
 {% endblock %}

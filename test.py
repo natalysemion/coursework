@@ -40,14 +40,19 @@ def get_top_track(artist_id: str):
 
 def get_artist_id(name: str):
     headers = {
-        'Authorization': 'Bearer BQClO3maayUkke9f-9TEx1WHlbuoTX1niPBw2wpJDrF5RFRG6Lab1nhQXR75m8EHYdrWlAEy_0BLFAnRhi6xKu4gmXlSZ1GO0ADq_LtTzAhhseRLchQ'
+         'Authorization': f'Bearer {get_token()}'
     }
     url = f'https://api.spotify.com/v1/search?q={name}&type=artist'
     response = requests.get(url, headers=headers)
-    print(response.content)
+    #print(response.content)
+    if response.status_code == 200:
+        data = response.json()
+        # Перевірити, чи є результати в відповіді
+        if 'artists' in data and 'items' in data['artists'] and data['artists']['items']:
+            artist_id = data['artists']['items'][0]['id']
+            print({artist_id})
 
-
-#get_artist_id('Jann')
-get_token()
-get_top_track('61mjebytLODtxAOS9ULCmb')
+get_artist_id('Jann')
+#get_token()
+#get_top_track('61mjebytLODtxAOS9ULCmb')
 # get_token()

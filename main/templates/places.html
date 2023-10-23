@@ -1,25 +1,17 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 
-{% block title %}Заголовок сторінки{% endblock %}
-
+{% block title %}Список місць{% endblock %}
 
 {% block content %}
+<h1>Список місць</h1>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список місць</title>
-</head>
-<body>
-    <h1>Список місць</h1>
-    <ul>
+<!-- Ваша інформація про місця -->
+   <ul>
         {% for place in places %}
             <li>
                 <h2><a href="{% url 'place_details' place.id %}">{{ place.name }}</a></h2>
                 <p>Місто: {{ place.city }}</p>
-                <p>Місцерозташування: {{ place.location }}</p>
                 <p>Вмістимість: {{ place.capacity }}</p>
 
                 <!-- Додавання фотографії місця, якщо вона доступна -->
@@ -32,38 +24,37 @@
         {% endfor %}
     </ul>
     <a href="{% url 'home' %}">На головну</a>
-</body>
-</html>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbCzGsAHX87x7ZALEZRuU95oQ9LYAqIDw&libraries=places&callback=initMap" async defer></script>
+<div id="map" style="width: 100%; height: 400px;"></div>
 
 <script>
   let map;
   function initMap() {
-    // Створюємо об'єкт карти
     map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: 0, lng: 0 }, // Центр карти
-      zoom: 10, // Зум карти
+      center: { lat: 50, lng: 20 },
+      zoom: 3.2
     });
 
-    // Отримуємо дані про всі об'єкти Place з сервера (за допомогою AJAX запиту, наприклад).
+    var places = [{% for place in places %}
+      {
+        name: "{{ place.name }}",
+        lat: {{ place.lat }},
+        lng: {{ place.lng }},
+      },
+      {% endfor %}];
 
-    // Перебираємо дані про об'єкти Place та додаємо маркери на карту
-    places.forEach((place) => {
-      const marker = new google.maps.Marker({
-        position: { lat: place.lat, lng: place.lng }, // Координати місця
+    for (var i = 0; i < places.length; i++) {
+      var place = places[i];
+      var marker = new google.maps.Marker({
+        position: { lat: place.lat, lng: place.lng },
         map: map,
-        title: place.name, // Заголовок маркера
+        title: place.name
       });
-
-      // Додайте подію на клік по маркеру, якщо потрібно
-      marker.addListener("click", () => {
-        // Дії при кліку на маркер
-      });
-    });
+    }
   }
 </script>
-<div id="map" style="width: 100%; height: 400px;"></div>
 
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbCzGsAHX87x7ZALEZRuU95oQ9LYAqIDw&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>
 {% endblock %}

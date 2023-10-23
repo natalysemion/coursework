@@ -6,6 +6,8 @@ from .forms import EventForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
+from .spotify import get_top_track
+
 from django.shortcuts import render, redirect
 import requests
 from .forms import OrderForm
@@ -26,30 +28,28 @@ def song_detail(request, song_id):
 
 def artist_list(request):
     artists = Artist.objects.all()
-    data_for_chart = []
-
+    data_for_chart1 = []
+    data_for_chart2 = []
     for artist in artists:
         songs_count = Song.objects.filter(artist=artist).count()
-        data_for_chart.append({'artist_name': artist.name, 'songs_count': songs_count})
+        data_for_chart1.append({'artist_name': artist.name, 'songs_count': songs_count})
+        events_count = artist.events.count()
+        data_for_chart2.append({'artist_name': artist.name, 'events_count': events_count})
 
-    context = {'artists': artists, 'data_for_chart': data_for_chart}
+    context = {'artists': artists, 'data_for_chart1': data_for_chart1, 'data_for_chart2': data_for_chart2}
     return render(request, 'artists.html', context)
-
-
-def get_top_track(artist_id: str):
-    url = f'https://api.spotify.com/v1/artists/{artist_id}/top-tracks'
-    headers = {
-        'Authorization': 'Bearer 8e715ebcda0e499e8728feae4d34967b'
-    }
-    response = requests.get(url, headers=headers)
-    print(response)
 
 def artist_details(request, artist_id):
     artist = get_object_or_404(Artist, pk=artist_id)
     # Отримайте список подій для поточного артиста
     events = artist.events.all()
-
-    return render(request, 'artist_details.html', {'artist': artist, 'events': events})
+    top_track_data = get_top_track(artist.name)
+    context = {
+        'artist': artist,
+        'events': events,
+        'top_track_data': top_track_data,
+    }
+    return render(request, 'artist_details.html', context)
 
 def event_list(request):
     events = Event.objects.all()
