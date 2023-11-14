@@ -1,13 +1,42 @@
-<!-- edit_event.html -->
-
 {% extends 'base.html' %}
 
 {% block content %}
 <h1>Редагування події</h1>
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+
+    <input type="text" class="form-control" id="place-autocomplete" placeholder="Search for a place" name="place">
+
     <button type="submit" class="btn btn-primary">Зберегти зміни</button>
 </form>
+
 <a href="{% url 'event_list' %}">Скасувати</a>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script>
+    $(document).ready(function() {
+    // Initialize autocomplete for the name input field
+    $("#name-autocomplete").autocomplete({
+        source: '/api/events/autocomplete/',
+        minLength: 3,
+        select: function(event, ui) {
+            // Set the selected event's ID in the hidden input field
+            $("#event_id").val(ui.item.id);
+        },
+        response: function(event, ui) {
+            if (ui.content.length > 0) {
+                // Show the results list
+                $("#results-list").show();
+            } else {
+                // Hide the results list
+                $("#results-list").hide();
+            }
+        }
+    });
+});
+</script>
+
 {% endblock %}

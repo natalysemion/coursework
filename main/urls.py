@@ -1,10 +1,14 @@
 from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
 from main import views, spotify
-
+from .views import NameAutocomplete
 
 urlpatterns = [
     path("", views.home, name="home"),
+
+    path('name_autocomplete/', NameAutocomplete.as_view(), name='name_autocomplete'),
+    path('api/events/autocomplete/', views.event_autocomplete, name='event_autocomplete'),
+
 
     path('artists/', views.artist_list, name='artist_list'),
     path('artist/<int:artist_id>/', views.artist_details, name='artist_details'),

@@ -11,7 +11,42 @@ from .spotify import get_top_track
 from django.shortcuts import render, redirect
 import requests
 from .forms import OrderForm
+from django.http import JsonResponse
+from django.views import View
 
+
+
+def event_autocomplete(request):
+    term = request.GET.get('term')
+    if term:
+        events = Event.objects.filter(name__icontains=term)
+        data = []
+        for event in events:
+            data.append({
+                'id': event.id,
+                'name': event.name
+            })
+        return JsonResponse(data, safe=False)
+    return JsonResponse([])
+def place_autocomplete(request):
+    term = request.GET.get('term')
+    if term:
+        places = Place.objects.filter(name__icontains=term)
+        data = []
+        for place in places:
+            data.append({
+                'id': place.id,
+                'name': place.name
+            })
+        return JsonResponse(data, safe=False)
+    return JsonResponse([])
+
+class NameAutocomplete(View):
+    def get(self, request, *args, **kwargs):
+        term = request.GET.get('term', '')
+        names = Event.objects.filter(name__icontains=term).values_list('name', flat=True)[:10]
+        results = list(names)
+        return JsonResponse(results, safe=False)
 
 def index(response, id):
     ls = Artist.objects.get(id=id)
